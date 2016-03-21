@@ -11,7 +11,7 @@
 #include <numa.h>
 #include <numaif.h>
 
-#define LOOP_TIME 20
+#define LOOP_TIME 1024
 
 static double get_sec(struct timespec *start, struct timespec *end)
 {

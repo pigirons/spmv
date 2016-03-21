@@ -32,16 +32,15 @@ int read_csr_mat(const char *file_name, struct csr_mat_t *mat)
         return -1;
     }
 
-    fread(&mat->cols, sizeof(int), 1, fp);
     fread(&mat->rows, sizeof(int), 1, fp);
+    fread(&mat->cols, sizeof(int), 1, fp);
     fread(&mat->non_zeros, sizeof(INT64), 1, fp);
 
     mat->row_ptr = (DWORD*)numa_alloc((mat->rows + 1) * sizeof(DWORD));
     mat->col_idx = (int*)numa_alloc(mat->non_zeros * sizeof(int));
     mat->vals    = (FLOAT*)numa_alloc(mat->non_zeros * sizeof(FLOAT));
 
-    mat->row_ptr[0] = 0;
-    fread(&mat->row_ptr[1], sizeof(DWORD), mat->rows, fp);
+    fread(mat->row_ptr, sizeof(DWORD), mat->rows + 1, fp);
     fread(mat->col_idx, sizeof(int), mat->non_zeros, fp);
     fread(mat->vals, sizeof(FLOAT), mat->non_zeros, fp);
 
